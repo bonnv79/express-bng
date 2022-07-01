@@ -10,16 +10,11 @@ router.get("/", async (req, res) => {
   try {
     res.set('Access-Control-Allow-Origin', '*');
 
-    // res.json({
-    //   status: 200,
-    //   message: "Get data has successfully",
-    //   data: [{ id: 1, name: 'hello world' }],
-    // });
-
     res.send({
       status: 200,
       message: "Get data has successfully",
-      data: [{ id: 1, name: 'hello world 1' }],
+      data: [{ id: 1, name: 'hello world' }],
+      version: '1.0.0'
     });
   } catch (error) {
     console.error(error);
