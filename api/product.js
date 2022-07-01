@@ -8,6 +8,8 @@ const router = express.Router();
  */
 router.get("/", async (req, res) => {
   try {
+    res.set('Access-Control-Allow-Origin', '*');
+
     res.json({
       status: 200,
       message: "Get data has successfully",
