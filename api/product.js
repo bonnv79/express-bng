@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
     res.json({
       status: 200,
       message: "Get data has successfully",
+      data: [{ id: 1, name: 'hello world' }],
     });
   } catch (error) {
     console.error(error);

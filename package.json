@@ -1,26 +1,30 @@
 {
-  "name": "express-vercel",
+  "name": "express-bng",
   "version": "1.0.0",
   "description": "Deploy express js to vercel.",
   "main": "index.js",
   "engines": {
-    "node" : "14.x"
+    "node": "14.x"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hatuanem199801/express-vercel.git"
+    "url": "git+https://github.com/bonnv79/express-bng.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hatuanem199801/express-vercel/issues"
+    "url": "https://github.com/bonnv79/express-bng/issues"
   },
-  "homepage": "https://github.com/hatuanem199801/express-vercel#readme",
+  "homepage": "https://github.com/bonnv79/express-bng#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18"
   }
 }
