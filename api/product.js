@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { connectToDatabase } = require("../db/mongodb");
+const { getVersion } = require("./utils");
+
+const version = getVersion();
 
 /**
  * GET product list.
@@ -19,12 +22,10 @@ router.get("/", async (req, res) => {
       ])
       .toArray();
 
-    // const data = await db_connect.collection("records").find({}).toArray();
-
     res.send({
       status: 200,
       message: "Get data has successfully",
-      version: '1.0.3',
+      version,
       data
     });
 
@@ -33,7 +34,7 @@ router.get("/", async (req, res) => {
     return res.status(500).send({
       status: 500,
       message: 'Server error',
-      version: '1.0.3',
+      version,
       error
     });
   }

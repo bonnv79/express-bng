@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 
-const MONGODB_URI = process.env.ATLAS_URI;
-const MONGODB_DB = process.env.MONGODB_DB || 'react-mongodb-bng-dev';
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB = process.env.MONGODB_DB;
 const options = {};
 let client;
 let clientPromise;
@@ -15,8 +15,6 @@ if (!MONGODB_DB) {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  // In development mode, use a global variable so that the value
-  // is preserved across module reloads caused by HMR (Hot Module Replacement).
   if (!global._mongoClientPromise) {
     client = new MongoClient(MONGODB_URI, options)
     global._mongoClientPromise = client.connect()
@@ -27,19 +25,6 @@ if (process.env.NODE_ENV === 'development') {
   client = new MongoClient(MONGODB_URI, options)
   clientPromise = client.connect()
 }
-
-// export const connectToDatabase = async () => {
-//   const client = await clientPromise;
-//   const db = client.db(MONGODB_DB);
-//   return {
-//     client,
-//     db
-//   }
-// }
-
-// Export a module-scoped MongoClient promise. By doing this in a
-// separate module, the client can be shared across functions.
-// export default clientPromise;
 
 module.exports = {
   connectToDatabase: async () => {

@@ -1,7 +1,8 @@
 const express = require("express");
+const { getVersion } = require("./utils");
 const router = express.Router();
 
-const PORT = process.env.PORT;
+const version = getVersion();
 
 /**
  * GET product list.
@@ -10,18 +11,20 @@ const PORT = process.env.PORT;
  */
 router.get("/", async (req, res) => {
   try {
-    res.set('Access-Control-Allow-Origin', '*');
-
     res.send({
       status: 200,
       message: "Get data has successfully",
-      data: [{ id: 1, name: 'hello world' }],
-      version: '1.0.3',
-      PORT
+      data: [],
+      version
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error" + PORT);
+    return res.status(500).send({
+      status: 500,
+      message: 'Server error',
+      version,
+      error
+    });
   }
 });
 
