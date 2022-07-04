@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
-const dbo = require("../db/connect");
+const { connectToDatabase } = require("../db/mongodb");
 
 /**
  * GET product list.
@@ -12,7 +11,7 @@ router.get("/", async (req, res) => {
   try {
     res.set('Access-Control-Allow-Origin', '*');
 
-    let db = dbo.getDb("react-mongodb-bng-dev");
+    let { db } = await connectToDatabase();
     const data = await db
       .collection('records')
       .aggregate([
@@ -25,13 +24,18 @@ router.get("/", async (req, res) => {
     res.send({
       status: 200,
       message: "Get data has successfully",
-      version: '1.0.2',
+      version: '1.0.3',
       data
     });
 
   } catch (error) {
     console.error(error);
-    return res.status(500).send("Server error");
+    return res.status(500).send({
+      status: 500,
+      message: 'Server error',
+      version: '1.0.3',
+      error
+    });
   }
 });
 

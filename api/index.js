@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
       status: 200,
       message: "Get data has successfully",
       data: [{ id: 1, name: 'hello world' }],
-      version: '1.0.2',
+      version: '1.0.3',
       PORT
     });
   } catch (error) {
