@@ -8,10 +8,10 @@ const index = require("./api");
 const { clientPromise } = require("./db/mongodb");
 const PORT = process.env.PORT || 8080;
 
+app.use(cors());
 app.use(express.json({ extended: false }));
 app.use("/api", record);
 app.use("/", index);
-app.use(cors());
 
 app.listen(PORT, async () => {
   try {
