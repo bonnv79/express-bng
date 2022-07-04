@@ -14,7 +14,6 @@ router.get("/", async (req, res) => {
     res.send({
       status: 200,
       message: "Get data has successfully",
-      data: [],
       version
     });
   } catch (error) {

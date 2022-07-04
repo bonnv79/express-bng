@@ -3,15 +3,15 @@ require("dotenv").config();
 
 const app = express();
 const cors = require("cors");
-const product = require("./api/product");
+const record = require("./api/record");
 const index = require("./api");
 const { clientPromise } = require("./db/mongodb");
 const PORT = process.env.PORT || 8080;
 
-app.use(express.json({ extended: false }));
-app.use("/api/product", product);
-app.use("/", index);
 app.use(cors());
+app.use(express.json({ extended: false }));
+app.use("/api", record);
+app.use("/", index);
 
 app.listen(PORT, async () => {
   try {
