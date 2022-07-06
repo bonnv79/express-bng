@@ -1,76 +1,48 @@
 const express = require("express");
 const router = express.Router();
 const { connectToDatabase } = require("../db/mongodb");
+const { handleSuccess } = require("./utils");
 const ObjectId = require("mongodb").ObjectId;
 
-// const { getVersion } = require("./utils");
-// const version = getVersion();
-
-// router.get("/", async (req, res) => {
-//   try {
-//     let { db } = await connectToDatabase();
-//     const data = await db
-//       .collection('records')
-//       .aggregate([
-//         { $match: {} }
-//       ])
-//       .toArray();
-
-//     res.send({
-//       status: 200,
-//       message: "Get data has successfully",
-//       version,
-//       data
-//     });
-
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).send({
-//       status: 500,
-//       message: 'Server error',
-//       version,
-//       error
-//     });
-//   }
-// });
+const collectionName = 'records';
 
 router.route("/record").get(async (req, res) => {
   const { db } = await connectToDatabase();
   db
-    .collection("records")
+    .collection(collectionName)
     .find({})
-    .toArray(function (err, result) {
+    .toArray(function (err, data) {
       if (err) throw err;
-      res.json(result);
+      handleSuccess(res, { data });
     });
 });
 
 router.route("/record/:id").get(async (req, res) => {
   const { db } = await connectToDatabase();
   db
-    .collection("records")
+    .collection(collectionName)
     .findOne({
       _id: ObjectId(req?.params?.id)
-    }, (err, result) => {
+    }, (err, data) => {
       if (err) throw err;
-      res.json(result);
+      handleSuccess(res, { data });
     });
 });
 
-router.route("/record/add").post(async (req, response) => {
+router.route("/record/add").post(async (req, res) => {
   const { db } = await connectToDatabase();
   let myobj = {
     name: req.body.name,
     position: req.body.position,
     level: req.body.level,
   };
-  db.collection("records").insertOne(myobj, (err, res) => {
+  db.collection(collectionName).insertOne(myobj, (err, data) => {
     if (err) throw err;
-    response.json(res);
+    handleSuccess(res, { data });
   });
 });
 
-router.route("/record/update/:id").post(async (req, response) => {
+router.route("/record/update/:id").post(async (req, res) => {
   const { db } = await connectToDatabase();
   let myquery = { _id: ObjectId(req.params.id) };
   let newvalues = {
@@ -81,21 +53,19 @@ router.route("/record/update/:id").post(async (req, response) => {
     },
   };
   db
-    .collection("records")
-    .updateOne(myquery, newvalues, (err, res) => {
+    .collection(collectionName)
+    .updateOne(myquery, newvalues, (err, data) => {
       if (err) throw err;
-      console.log("1 document updated");
-      response.json(res);
+      handleSuccess(res, { data, message: '1 document updated' });
     });
 });
 
-router.route("/record/:id").delete(async (req, response) => {
+router.route("/record/:id").delete(async (req, res) => {
   const { db } = await connectToDatabase();
   let myquery = { _id: ObjectId(req.params.id) };
-  db.collection("records").deleteOne(myquery, (err, obj) => {
+  db.collection(collectionName).deleteOne(myquery, (err, data) => {
     if (err) throw err;
-    console.log("1 document deleted");
-    response.json(obj);
+    handleSuccess(res, { data, message: '1 document deleted' });
   });
 });
 
