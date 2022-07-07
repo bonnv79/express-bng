@@ -11,6 +11,7 @@ router.route("/record").get(async (req, res) => {
   db
     .collection(collectionName)
     .find({})
+    .sort({ _id: -1 })
     .toArray(function (err, data) {
       if (err) throw err;
       handleSuccess(res, { data });
