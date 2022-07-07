@@ -1,6 +1,6 @@
 {
   "name": "express-bng",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Deploy express js to vercel.",
   "main": "index.js",
   "engines": {
