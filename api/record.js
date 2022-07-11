@@ -6,7 +6,8 @@ const ObjectId = require("mongodb").ObjectId;
 
 const collectionName = 'records';
 
-router.route("/record").get(async (req, res) => {
+// get all item
+router.route("/records").get(async (req, res) => {
   const { db } = await connectToDatabase();
   db
     .collection(collectionName)
@@ -18,6 +19,49 @@ router.route("/record").get(async (req, res) => {
     });
 });
 
+// get item by page and page size
+router.route("/record").get(async (req, res) => {
+  const { query = {} } = req || {};
+  const page = Number(query?.page || 0);
+  const pageSize = Number(query?.pageSize || 10);
+  const search = query?.search || '';
+
+  const { db } = await connectToDatabase();
+
+  db
+    .collection(collectionName)
+    .aggregate([
+      {
+        $match: {
+          $or: [
+            { name: { '$regex': search || '', '$options': 'i' } },
+          ]
+        },
+      },
+      { $sort: { _id: -1 } },
+      { $project: { password: 0 } },
+      {
+        $facet: {
+          metadata: [
+            { $count: "total" },
+            { $addFields: { page, pageSize } }
+          ],
+          data: [
+            { $skip: page * pageSize },
+            { $limit: pageSize }
+          ]
+        }
+      }
+    ])
+    .toArray(function (err, resJson) {
+      if (err) throw err;
+      const { data, metadata } = resJson?.[0] || {};
+
+      handleSuccess(res, { ...(metadata?.[0] || {}), data: data || [] });
+    });
+});
+
+// get item by id
 router.route("/record/:id").get(async (req, res) => {
   const { db } = await connectToDatabase();
   db
@@ -30,6 +74,7 @@ router.route("/record/:id").get(async (req, res) => {
     });
 });
 
+// add new item
 router.route("/record/add").post(async (req, res) => {
   const { db } = await connectToDatabase();
   let myobj = {
@@ -43,6 +88,7 @@ router.route("/record/add").post(async (req, res) => {
   });
 });
 
+// update item
 router.route("/record/update/:id").post(async (req, res) => {
   const { db } = await connectToDatabase();
   let myquery = { _id: ObjectId(req.params.id) };
@@ -61,6 +107,7 @@ router.route("/record/update/:id").post(async (req, res) => {
     });
 });
 
+// delete item
 router.route("/record/:id").delete(async (req, res) => {
   const { db } = await connectToDatabase();
   let myquery = { _id: ObjectId(req.params.id) };
