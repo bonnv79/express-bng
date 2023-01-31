@@ -4,11 +4,11 @@ const { connectToDatabase } = require("../db/mongodb");
 const { handleSuccess } = require("./utils");
 const ObjectId = require("mongodb").ObjectId;
 
-const collectionName = 'news';
-const rootPath = '/news';
+const collectionName = 'items';
+const rootPath = '/item';
 
 // get all item
-router.route(rootPath).get(async (req, res) => {
+router.route(`${rootPath}s`).get(async (req, res) => {
   const { db } = await connectToDatabase();
   db
     .collection(collectionName)
@@ -21,7 +21,7 @@ router.route(rootPath).get(async (req, res) => {
 });
 
 // get item by page and page size
-router.route(`${rootPath}-page`).get(async (req, res) => {
+router.route(`${rootPath}`).get(async (req, res) => {
   const { query = {} } = req || {};
   const page = Number(query?.page || 0);
   const pageSize = Number(query?.pageSize || 10);
@@ -35,7 +35,9 @@ router.route(`${rootPath}-page`).get(async (req, res) => {
       {
         $match: {
           $or: [
+            { _id: { '$regex': search || '', '$options': 'i' } },
             { name: { '$regex': search || '', '$options': 'i' } },
+            { title: { '$regex': search || '', '$options': 'i' } },
           ]
         },
       },
