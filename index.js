@@ -4,7 +4,7 @@ require("dotenv").config();
 const app = express();
 const cors = require("cors");
 const record = require("./api/record");
-const news = require("./api/news");
+const item = require("./api/item");
 const index = require("./api");
 const { clientPromise } = require("./db/mongodb");
 const PORT = process.env.PORT || 8080;
@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json({ extended: false }));
 app.use("/api", record);
-app.use("/api", news);
+app.use("/api", item);
 app.use("/", index);
 
 app.listen(PORT, async () => {
